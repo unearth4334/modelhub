@@ -1,0 +1,36 @@
+# ===== Generic deploy config (flat YAML keys only) =====
+# Copy this file to deploy_config.yml and edit for your environment.
+# Do NOT commit deploy_config.yml if it contains hostnames, paths, or sensitive info.
+
+# Identity
+project_name: your_project_name
+default_branch: main
+
+# Location (leave remote_host blank to run locally)
+remote_host: ""                 # e.g., "user@example.com" or "server.local"
+ssh_cmd: ssh                    # e.g., 'ssh -p 2222 -o StrictHostKeyChecking=no'
+
+# Paths
+remote_path: /srv/your_project                      # path on the remote host (or local if remote_host is empty)
+mounted_path: ""                                     # optional local path used for git deploys (e.g., /mnt/projects/your_project)
+compose_workdir: .                                   # directory containing docker-compose.yml (relative to remote_path)
+compose_file: docker-compose.yml                     # for reference; compose command will auto-pick this file
+
+# Docker / Compose
+docker_cmd: docker                                   # full path or just 'docker' (or 'docker-compose' if preferred)
+compose_subcmd: compose                              # set to "" to use the legacy 'docker-compose' binary
+# Examples:
+#   docker_cmd: docker
+#   compose_subcmd: compose
+# OR:
+#   docker_cmd: docker-compose
+#   compose_subcmd: ""   # means "use docker-compose" directly
+
+# Git
+git_origin_url: ""                                   # optional; if empty, inferred from the current repo when running `./deploy.sh git`
+
+# App logs
+log_volume_suffix: log_data                          # app logs volume name will be: ${project_name}_${log_volume_suffix}
+
+# Safety
+confirm_destroy: true                                # require confirmation before 'destroy' removes volumes
