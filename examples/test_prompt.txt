@@ -1,0 +1,35 @@
+
+Modify this content:
+
+```
+#### {Emily}
+
+##### Clothing
+
+-  Pink hoodie
+-  Lacey bralette
+-  Fitted jeans
+-  Pink socks
+-  Sneakers
+-  Red panties
+
+##### Mood
+
+- **Cheerful:** 0.8 [0.0 = sad, withdrawn | 1.0 = radiant, bubbly]
+- **Mischief:** 0.6 [0.0 = serious, straightforward | 1.0 = playful trickster]
+- **Seriousness:** 0.3 [0.0 = lighthearted | 1.0 = deeply intense]
+- **Tenderness:** 0.7 [0.0 = cold, distant | 1.0 = nurturing, caring]
+```
+
+According to the following instructions:
+
+```
+### Status Push
+- Clothing:
+    - (~,Emily) Pink hoodie (torn down the middle)
+    - (-,Emily) Socks removed
+- Mood:
+    - (+,Emily.Shock) 0.4 [0.0 = composed | 1.0 = catatonic]
+    - (~,Emily.Mischief) 0.6 → 0.8
+
+```

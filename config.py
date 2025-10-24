@@ -8,7 +8,7 @@ from pathlib import Path
 
 # Ollama Configuration
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
-DEFAULT_TEXT_MODEL = os.getenv("DEFAULT_TEXT_MODEL", "llama3.2:1b")
+DEFAULT_TEXT_MODEL = os.getenv("DEFAULT_TEXT_MODEL", "deepseek-optimized")
 
 # Hugging Face Configuration
 IMAGE_MODEL = os.getenv("IMAGE_MODEL", "marqo/nsfw-image-detection-384")
@@ -21,7 +21,7 @@ API_PORT = int(os.getenv("API_PORT", "8000"))
 LAZY_LOAD_IMAGE_MODEL = os.getenv("LAZY_LOAD_IMAGE_MODEL", "true").lower() == "true"
 
 # Timeout Configuration (seconds)
-OLLAMA_TIMEOUT = int(os.getenv("OLLAMA_TIMEOUT", "300"))
+OLLAMA_TIMEOUT = int(os.getenv("OLLAMA_TIMEOUT", "600"))  # Increased for larger models
 HEALTH_CHECK_TIMEOUT = int(os.getenv("HEALTH_CHECK_TIMEOUT", "5"))
 
 
