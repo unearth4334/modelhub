@@ -4,6 +4,7 @@ Can be overridden using environment variables.
 """
 
 import os
+from pathlib import Path
 
 # Ollama Configuration
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
@@ -22,3 +23,30 @@ LAZY_LOAD_IMAGE_MODEL = os.getenv("LAZY_LOAD_IMAGE_MODEL", "true").lower() == "t
 # Timeout Configuration (seconds)
 OLLAMA_TIMEOUT = int(os.getenv("OLLAMA_TIMEOUT", "300"))
 HEALTH_CHECK_TIMEOUT = int(os.getenv("HEALTH_CHECK_TIMEOUT", "5"))
+
+
+def load_api_keys():
+    """Load API keys from api_keys.txt file."""
+    api_keys = {}
+    api_keys_file = Path(__file__).parent / "api_keys.txt"
+    
+    if api_keys_file.exists():
+        try:
+            with open(api_keys_file, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#'):
+                        if ':' in line:
+                            key, value = line.split(':', 1)
+                            api_keys[key.strip()] = value.strip()
+        except Exception as e:
+            print(f"Warning: Failed to load API keys from {api_keys_file}: {e}")
+    
+    return api_keys
+
+
+# Load API keys
+_api_keys = load_api_keys()
+
+# Hugging Face Configuration  
+HUGGINGFACE_TOKEN = os.getenv("HUGGINGFACE_TOKEN", _api_keys.get("huggingface", ""))

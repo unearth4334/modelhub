@@ -31,6 +31,7 @@ app = FastAPI(
 OLLAMA_BASE_URL = config.OLLAMA_BASE_URL
 DEFAULT_TEXT_MODEL = config.DEFAULT_TEXT_MODEL
 IMAGE_MODEL = config.IMAGE_MODEL
+HUGGINGFACE_TOKEN = config.HUGGINGFACE_TOKEN
 OLLAMA_TIMEOUT = config.OLLAMA_TIMEOUT
 HEALTH_CHECK_TIMEOUT = config.HEALTH_CHECK_TIMEOUT
 
@@ -44,10 +45,17 @@ def get_image_classifier():
     if image_classifier is None:
         logger.info(f"Loading image classification model: {IMAGE_MODEL}")
         device = 0 if torch.cuda.is_available() else -1
+        
+        # Use Hugging Face token if available
+        kwargs = {"device": device}
+        if HUGGINGFACE_TOKEN:
+            kwargs["use_auth_token"] = HUGGINGFACE_TOKEN
+            logger.info("Using Hugging Face authentication token")
+        
         image_classifier = pipeline(
             "image-classification",
             model=IMAGE_MODEL,
-            device=device,
+            **kwargs
         )
         logger.info("Image classification model loaded successfully")
     return image_classifier
@@ -221,9 +229,21 @@ async def analyze_image(file: UploadFile = File(...)):
 
     except Exception as e:
         logger.error(f"Image analysis error: {e}")
+        
+        # Provide specific error messages for common Hugging Face authentication issues
+        error_msg = str(e)
+        if "401" in error_msg or "unauthorized" in error_msg.lower():
+            detail = "Hugging Face authentication failed. Check HUGGINGFACE_TOKEN or api_keys.txt file."
+        elif "403" in error_msg or "forbidden" in error_msg.lower():
+            detail = "Access forbidden to Hugging Face model. Check model permissions or authentication."
+        elif "rate limit" in error_msg.lower():
+            detail = "Hugging Face API rate limit exceeded. Please try again later."
+        else:
+            detail = f"Image analysis failed: {str(e)}"
+            
         raise HTTPException(
             status_code=500,
-            detail=f"Image analysis failed: {str(e)}",
+            detail=detail,
         )
 
 

@@ -208,3 +208,6 @@ __marimo__/
 
 # Deploy config file
 deploy_config.yml
+
+# Secret files
+api_keys.txt
