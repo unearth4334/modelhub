@@ -57,7 +57,7 @@ curl -X POST http://localhost:8000/api/v1/generate/text \
   -H "Content-Type: application/json" \
   -d '{
     "prompt": "Explain Docker in simple terms",
-    "model": "deepseek-r1:8b",
+    "model": "llama3.2:1b",
     "max_tokens": 256,
     "temperature": 0.7
   }' | python3 -m json.tool
@@ -92,5 +92,5 @@ If you get connection errors:
 If Ollama models are not available, pull them first:
 
 ```bash
-docker exec -it modelhub-ollama ollama pull deepseek-r1:8b
+docker exec -it modelhub-ollama ollama pull llama3.2:1b
 ```

@@ -48,10 +48,10 @@ This will:
 
 ### 3. Download the LLM Model
 
-After the services are running, download the deepseek-r1:8b model:
+After the services are running, download the llama3.2:1b model:
 
 ```bash
-docker exec -it modelhub-ollama ollama pull deepseek-r1:8b
+docker exec -it modelhub-ollama ollama pull llama3.2:1b
 ```
 
 ### 4. Verify the Service
@@ -140,7 +140,7 @@ curl -X POST http://localhost:8000/api/v1/generate/text \
   -H "Content-Type: application/json" \
   -d '{
     "prompt": "Write a haiku about coding",
-    "model": "deepseek-r1:8b",
+    "model": "llama3.2:1b",
     "max_tokens": 100,
     "temperature": 0.8
   }'
@@ -163,7 +163,7 @@ response = requests.post(
     "http://localhost:8000/api/v1/generate/text",
     json={
         "prompt": "What is machine learning?",
-        "model": "deepseek-r1:8b",
+        "model": "llama3.2:1b",
         "max_tokens": 256
     }
 )
