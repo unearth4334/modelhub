@@ -48,6 +48,20 @@ python3 test_image_analysis.py
 python3 test_image_analysis.py /path/to/your/image.jpg
 ```
 
+### 4. Dashboard Test
+
+Test the web dashboard and its components:
+
+```bash
+python3 test_dashboard.py
+```
+
+This will verify:
+- Dashboard HTML endpoint is accessible
+- Static CSS and JavaScript files load correctly
+- Health endpoint integration works
+- All dashboard components are properly configured
+
 ## Using cURL
 
 ### Text Generation
