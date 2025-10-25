@@ -148,6 +148,53 @@ async def health_check():
     )
 
 
+@app.get("/api/v1/models", response_model=dict)
+async def list_models():
+    """
+    List available Ollama models.
+
+    Returns:
+        Dictionary with list of available models
+    """
+    try:
+        async with httpx.AsyncClient(timeout=HEALTH_CHECK_TIMEOUT) as client:
+            response = await client.get(f"{OLLAMA_BASE_URL}/api/tags")
+            
+            if response.status_code != 200:
+                raise HTTPException(
+                    status_code=response.status_code,
+                    detail="Failed to fetch models from Ollama",
+                )
+            
+            data = response.json()
+            models = data.get("models", [])
+            
+            # Extract model names
+            model_names = [model.get("name", "") for model in models if model.get("name")]
+            
+            return {
+                "models": model_names,
+                "default_model": DEFAULT_TEXT_MODEL,
+            }
+            
+    except httpx.TimeoutException:
+        raise HTTPException(
+            status_code=504,
+            detail="Request to Ollama timed out",
+        )
+    except httpx.RequestError as e:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Failed to connect to Ollama: {str(e)}",
+        )
+    except Exception as e:
+        logger.error(f"Error listing models: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Internal server error: {str(e)}",
+        )
+
+
 @app.post("/api/v1/generate/text", response_model=TextGenerationResponse)
 async def generate_text(request: TextGenerationRequest):
     """
