@@ -7,11 +7,9 @@ Modify this content:
 ##### Clothing
 
 -  Pink hoodie
--  Lacey bralette
 -  Fitted jeans
 -  Pink socks
 -  Sneakers
--  Red panties
 
 ##### Mood
 
@@ -26,7 +24,7 @@ According to the following instructions:
 ```
 ### Status Push
 - Clothing:
-    - (~,Emily) Pink hoodie (torn down the middle)
+    - (~,Emily) Pink hoodie (torn and dirty)
     - (-,Emily) Socks removed
 - Mood:
     - (+,Emily.Shock) 0.4 [0.0 = composed | 1.0 = catatonic]
