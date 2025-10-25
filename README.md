@@ -4,11 +4,12 @@ A Docker-based unified AI model service that allows applications running on a QN
 
 ## Features
 
+- **Web Dashboard**: Modern dark-themed web UI for monitoring and using the service
 - **Text Generation**: LLM inference using Ollama (e.g., deepseek-r1:8b)
 - **Image Analysis**: Image classification using Hugging Face models (marqo/nsfw-image-detection-384)
 - **Single REST API**: Unified interface for both text and image models
 - **Docker-based**: Easy deployment with docker-compose
-- **Health Monitoring**: Built-in health check endpoints
+- **Health Monitoring**: Built-in health check endpoints with real-time status
 
 ## Architecture
 
@@ -54,15 +55,57 @@ After the services are running, download the llama3.2:1b model:
 docker exec -it modelhub-ollama ollama pull llama3.2:1b
 ```
 
-### 4. Verify the Service
+### 4. Access the Dashboard
 
-Check service health:
+Open your browser and navigate to:
+
+```
+http://localhost:8000/dashboard
+```
+
+The dashboard provides:
+- Real-time system status monitoring
+- Interactive text generation interface
+- Interactive image analysis interface
+- Direct access to API documentation
+
+You can also check service health via API:
 
 ```bash
 curl http://localhost:8000/health
 ```
 
+## Web Dashboard
+
+ModelHub includes a modern web dashboard with a dark theme for easy monitoring and interaction with the AI services.
+
+![ModelHub Dashboard](https://github.com/user-attachments/assets/bf1b3ae1-34cd-4a6f-be20-af0f945449d3)
+
+### Dashboard Features
+
+- **System Status**: Real-time monitoring of API service, Ollama LLM, and Image Model status
+- **Text Generation**: Interactive form to generate text using Ollama models with configurable parameters
+- **Image Analysis**: Upload and analyze images using Hugging Face models
+- **Dark Theme**: Easy on the eyes with a modern, professional dark interface
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+- **Auto-refresh**: Status updates automatically every 30 seconds
+
+### Accessing the Dashboard
+
+Once the service is running, access the dashboard at: http://localhost:8000/dashboard
+
 ## API Endpoints
+
+### Dashboard (Web UI)
+
+```bash
+GET http://localhost:8000/dashboard
+```
+
+Access the interactive web dashboard with dark theme UI for:
+- System status monitoring
+- Text generation
+- Image analysis
 
 ### Root Endpoint
 
@@ -332,12 +375,13 @@ pip install -r requirements.txt
 python app.py
 ```
 
-### API Documentation
+### Web UI and API Documentation
 
-Once the service is running, access interactive API documentation:
+Once the service is running, access the following interfaces:
 
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+- **Dashboard**: http://localhost:8000/dashboard (Main web interface with dark theme)
+- **Swagger UI**: http://localhost:8000/docs (Interactive API documentation)
+- **ReDoc**: http://localhost:8000/redoc (Alternative API documentation)
 
 ## Performance Considerations
 

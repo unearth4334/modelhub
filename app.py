@@ -5,11 +5,15 @@ Provides endpoints for text generation (via Ollama) and image analysis (via Hugg
 
 import io
 import logging
+from pathlib import Path
 from typing import Optional
 
 import httpx
 import torch
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, HTTPException, UploadFile, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from PIL import Image
 from pydantic import BaseModel, Field
 from transformers import pipeline
@@ -26,6 +30,11 @@ app = FastAPI(
     description="REST API for text generation and image analysis",
     version="1.0.0",
 )
+
+# Setup static files and templates
+BASE_DIR = Path(__file__).resolve().parent
+app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
+templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 # Configuration from config module
 OLLAMA_BASE_URL = config.OLLAMA_BASE_URL
@@ -104,11 +113,18 @@ async def root():
         "name": "Unified AI Model Service",
         "version": "1.0.0",
         "endpoints": {
+            "dashboard": "/dashboard",
             "health": "/health",
             "text_generation": "/api/v1/generate/text",
             "image_analysis": "/api/v1/analyze/image",
         },
     }
+
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard(request: Request):
+    """Dashboard web UI."""
+    return templates.TemplateResponse("dashboard.html", {"request": request})
 
 
 @app.get("/health", response_model=HealthResponse)

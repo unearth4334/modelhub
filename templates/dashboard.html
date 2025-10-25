@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModelHub Dashboard</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 ModelHub Dashboard</h1>
+            <p class="subtitle">Unified AI Model Service</p>
+        </header>
+
+        <!-- Status Section -->
+        <section class="status-section">
+            <h2>System Status</h2>
+            <div class="status-grid">
+                <div class="status-card" id="api-status">
+                    <div class="status-icon">⚡</div>
+                    <div class="status-info">
+                        <h3>API Service</h3>
+                        <p class="status-value" id="api-status-value">Loading...</p>
+                    </div>
+                </div>
+                <div class="status-card" id="ollama-status">
+                    <div class="status-icon">🧠</div>
+                    <div class="status-info">
+                        <h3>Ollama LLM</h3>
+                        <p class="status-value" id="ollama-status-value">Loading...</p>
+                    </div>
+                </div>
+                <div class="status-card" id="image-model-status">
+                    <div class="status-icon">🖼️</div>
+                    <div class="status-info">
+                        <h3>Image Model</h3>
+                        <p class="status-value" id="image-model-status-value">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Text Generation Section -->
+            <section class="feature-section">
+                <h2>💬 Text Generation</h2>
+                <div class="feature-card">
+                    <form id="text-generation-form">
+                        <div class="form-group">
+                            <label for="text-model">Model:</label>
+                            <input type="text" id="text-model" name="model" value="llama3.2:1b" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="text-prompt">Prompt:</label>
+                            <textarea id="text-prompt" name="prompt" rows="4" placeholder="Enter your prompt here..." required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="max-tokens">Max Tokens:</label>
+                                <input type="number" id="max-tokens" name="max_tokens" value="512" min="1" max="4096">
+                            </div>
+                            <div class="form-group">
+                                <label for="temperature">Temperature:</label>
+                                <input type="number" id="temperature" name="temperature" value="0.7" min="0" max="2" step="0.1">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Generate Text</button>
+                    </form>
+                    <div id="text-result" class="result-container" style="display: none;">
+                        <h3>Generated Text:</h3>
+                        <div class="result-content" id="text-result-content"></div>
+                        <div class="result-meta" id="text-result-meta"></div>
+                    </div>
+                    <div id="text-loading" class="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Generating text...</p>
+                    </div>
+                    <div id="text-error" class="error-message" style="display: none;"></div>
+                </div>
+            </section>
+
+            <!-- Image Analysis Section -->
+            <section class="feature-section">
+                <h2>🖼️ Image Analysis</h2>
+                <div class="feature-card">
+                    <form id="image-analysis-form">
+                        <div class="form-group">
+                            <label for="image-file">Upload Image:</label>
+                            <input type="file" id="image-file" name="file" accept="image/*" required>
+                            <div id="image-preview" class="image-preview" style="display: none;">
+                                <img id="preview-img" src="" alt="Preview">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Analyze Image</button>
+                    </form>
+                    <div id="image-result" class="result-container" style="display: none;">
+                        <h3>Analysis Results:</h3>
+                        <div class="result-content" id="image-result-content"></div>
+                        <div class="result-meta" id="image-result-meta"></div>
+                    </div>
+                    <div id="image-loading" class="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Analyzing image...</p>
+                    </div>
+                    <div id="image-error" class="error-message" style="display: none;"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>ModelHub v1.0.0 | <a href="/docs" target="_blank">API Docs</a> | <a href="/health" target="_blank">Health Check</a></p>
+        </footer>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
