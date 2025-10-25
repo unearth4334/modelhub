@@ -3,6 +3,7 @@
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', function() {
     checkSystemStatus();
+    loadAvailableModels();
     setupTextGenerationForm();
     setupImageAnalysisForm();
     
@@ -50,6 +51,63 @@ function updateStatusCard(cardId, statusText, isHealthy) {
         } else {
             statusValue.classList.add('offline');
         }
+    }
+}
+
+// Load available models
+async function loadAvailableModels() {
+    const modelSelect = document.getElementById('text-model');
+    
+    try {
+        const response = await fetch('/api/v1/models');
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch models');
+        }
+        
+        const data = await response.json();
+        const models = data.models || [];
+        const defaultModel = data.default_model || '';
+        
+        // Clear loading option
+        modelSelect.innerHTML = '';
+        
+        if (models.length === 0) {
+            // No models available
+            const option = document.createElement('option');
+            option.value = '';
+            option.textContent = 'No models available';
+            modelSelect.appendChild(option);
+        } else {
+            // Add models to dropdown
+            models.forEach(modelName => {
+                const option = document.createElement('option');
+                option.value = modelName;
+                option.textContent = modelName;
+                
+                // Select default model if it matches
+                if (modelName === defaultModel) {
+                    option.selected = true;
+                }
+                
+                modelSelect.appendChild(option);
+            });
+            
+            // If default model is not in the list, select the first one
+            if (!modelSelect.value && models.length > 0) {
+                modelSelect.value = models[0];
+            }
+        }
+        
+    } catch (error) {
+        console.error('Error loading models:', error);
+        
+        // Show error in dropdown
+        modelSelect.innerHTML = '';
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'Error loading models';
+        modelSelect.appendChild(option);
     }
 }
 

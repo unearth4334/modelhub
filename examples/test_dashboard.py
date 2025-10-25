@@ -91,6 +91,24 @@ def test_dashboard():
         print(f"   ✗ Error accessing health endpoint: {e}")
         sys.exit(1)
     
+    # Test models endpoint (used by dashboard dropdown)
+    try:
+        print("6. Testing models endpoint...")
+        response = requests.get(f"{base_url}/api/v1/models", timeout=5)
+        response.raise_for_status()
+        data = response.json()
+        
+        if "models" in data and "default_model" in data:
+            print(f"   ✓ Models endpoint working (found {len(data['models'])} models)")
+            if data['models']:
+                print(f"   ✓ Available models: {', '.join(data['models'])}")
+        else:
+            print("   ✗ Models endpoint missing required fields")
+            sys.exit(1)
+    except requests.exceptions.RequestException as e:
+        print(f"   ✗ Error accessing models endpoint: {e}")
+        sys.exit(1)
+    
     print()
     print("✓ All dashboard tests passed!")
     print()
