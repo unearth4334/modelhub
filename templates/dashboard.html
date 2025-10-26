@@ -128,7 +128,6 @@
                 
                 if (lastBootId && lastBootId !== bootId) {
                     console.log('Server restarted detected, reloading page...');
-                    localStorage.setItem('bootId', bootId);
                     location.reload();
                 } else {
                     localStorage.setItem('bootId', bootId);

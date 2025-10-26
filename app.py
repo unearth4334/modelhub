@@ -25,8 +25,8 @@ import config
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Server boot ID for cache invalidation
-SERVER_BOOT_ID = str(int(time.time()))
+# Server boot ID for cache invalidation (using nanosecond precision)
+SERVER_BOOT_ID = str(time.time_ns())
 
 # Initialize FastAPI app
 app = FastAPI(
