@@ -2,9 +2,6 @@
 
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Dashboard initializing...');
-    console.log('🔧 DOM fully loaded, starting initialization');
-    
     checkSystemStatus();
     loadAvailableModels();
     setupTextGenerationForm();
@@ -12,8 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Auto-refresh status every 30 seconds
     setInterval(checkSystemStatus, 30000);
-    
-    console.log('✅ Dashboard initialization complete');
 });
 
 // Check system status
@@ -61,28 +56,21 @@ function updateStatusCard(cardId, statusText, isHealthy) {
 
 // Load available models
 async function loadAvailableModels() {
-    console.log('🔍 Loading available models...');
     const modelSelect = document.getElementById('text-model');
-    console.log('📋 Model select element:', modelSelect);
     
     try {
-        console.log('🌐 Fetching models from /api/v1/models');
         const response = await fetch('/api/v1/models');
         
         if (!response.ok) {
-            console.error('❌ Response not OK:', response.status, response.statusText);
             throw new Error('Failed to fetch models');
         }
         
         const data = await response.json();
-        console.log('📦 Received models data:', data);
         const models = data.models || [];
         const defaultModel = data.default_model || '';
-        console.log('🎯 Processing', models.length, 'models with default:', defaultModel);
         
         // Clear loading option
         modelSelect.innerHTML = '';
-        console.log('🧹 Cleared model select dropdown');
         
         if (models.length === 0) {
             // No models available
@@ -92,8 +80,7 @@ async function loadAvailableModels() {
             modelSelect.appendChild(option);
         } else {
             // Add models to dropdown
-            console.log('🔄 Adding models to dropdown...');
-            models.forEach((modelName, index) => {
+            models.forEach(modelName => {
                 const option = document.createElement('option');
                 option.value = modelName;
                 option.textContent = modelName;
@@ -101,34 +88,19 @@ async function loadAvailableModels() {
                 // Select default model if it matches
                 if (modelName === defaultModel) {
                     option.selected = true;
-                    console.log('✨ Set default model:', modelName);
                 }
                 
                 modelSelect.appendChild(option);
-                console.log(`➕ Added model ${index + 1}/${models.length}:`, modelName);
             });
             
             // If default model is not in the list, select the first one
             if (!modelSelect.value && models.length > 0) {
                 modelSelect.value = models[0];
-                console.log('🎯 Set first model as selected:', models[0]);
             }
-            
-            console.log('✅ Model dropdown populated successfully!');
-            console.log('📊 Final dropdown state:', {
-                options: modelSelect.options.length,
-                selectedValue: modelSelect.value,
-                selectedText: modelSelect.selectedOptions[0]?.text
-            });
         }
         
     } catch (error) {
-        console.error('❌ Error loading models:', error);
-        console.error('🔍 Error details:', {
-            name: error.name,
-            message: error.message,
-            stack: error.stack
-        });
+        console.error('Error loading models:', error);
         
         // Show error in dropdown
         modelSelect.innerHTML = '';
@@ -136,7 +108,6 @@ async function loadAvailableModels() {
         option.value = '';
         option.textContent = 'Error loading models';
         modelSelect.appendChild(option);
-        console.log('⚠️ Set error message in dropdown');
     }
 }
 

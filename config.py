@@ -8,7 +8,7 @@ from pathlib import Path
 
 # Ollama Configuration
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
-DEFAULT_TEXT_MODEL = os.getenv("DEFAULT_TEXT_MODEL", "deepseek-1.5b-optimized")
+DEFAULT_TEXT_MODEL = os.getenv("DEFAULT_TEXT_MODEL", "deepseek-r1:8b")
 
 # Hugging Face Configuration
 IMAGE_MODEL = os.getenv("IMAGE_MODEL", "marqo/nsfw-image-detection-384")
