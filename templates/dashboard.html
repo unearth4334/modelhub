@@ -118,5 +118,25 @@
     </div>
 
     <script src="/static/js/dashboard.js"></script>
+    <script>
+        // Auto-reload on server restart (boot ID change detection)
+        (async () => {
+            try {
+                const response = await fetch('/meta.json', { cache: 'no-store' });
+                const { bootId } = await response.json();
+                const lastBootId = localStorage.getItem('bootId');
+                
+                if (lastBootId && lastBootId !== bootId) {
+                    console.log('Server restarted detected, reloading page...');
+                    localStorage.setItem('bootId', bootId);
+                    location.reload();
+                } else {
+                    localStorage.setItem('bootId', bootId);
+                }
+            } catch (error) {
+                console.error('Failed to check server boot ID:', error);
+            }
+        })();
+    </script>
 </body>
 </html>

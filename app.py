@@ -5,6 +5,7 @@ Provides endpoints for text generation (via Ollama) and image analysis (via Hugg
 
 import io
 import logging
+import time
 from pathlib import Path
 from typing import Optional
 
@@ -24,6 +25,9 @@ import config
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Server boot ID for cache invalidation
+SERVER_BOOT_ID = str(int(time.time()))
+
 # Initialize FastAPI app
 app = FastAPI(
     title="Unified AI Model Service",
@@ -35,6 +39,23 @@ app = FastAPI(
 BASE_DIR = Path(__file__).resolve().parent
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
+
+
+# Cache control middleware
+@app.middleware("http")
+async def set_cache_headers(request: Request, call_next):
+    """Set appropriate cache headers for HTML and static assets."""
+    response = await call_next(request)
+    path = request.url.path
+    
+    # HTML files should always be revalidated
+    if path == "/" or path == "/dashboard" or path.endswith(".html"):
+        response.headers["Cache-Control"] = "no-cache, must-revalidate"
+    # Static assets can be cached long-term (assumes versioned filenames in production)
+    elif path.startswith("/static/"):
+        response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+    
+    return response
 
 # Configuration from config module
 OLLAMA_BASE_URL = config.OLLAMA_BASE_URL
@@ -115,10 +136,17 @@ async def root():
         "endpoints": {
             "dashboard": "/dashboard",
             "health": "/health",
+            "meta": "/meta.json",
             "text_generation": "/api/v1/generate/text",
             "image_analysis": "/api/v1/analyze/image",
         },
     }
+
+
+@app.get("/meta.json", response_model=dict)
+async def meta():
+    """Server metadata including boot ID for cache invalidation."""
+    return {"bootId": SERVER_BOOT_ID}
 
 
 @app.get("/dashboard", response_class=HTMLResponse)
